@@ -16,7 +16,7 @@
     </div>
     <div id="tabs">
       <div class="main_tabs">
-        <div class="tab location"> <span>{{this.location}}</span> </div>
+        <div class="tab location active"> <span>{{this.location}}</span> </div>
         <div class="tab talk"> <span>Talk</span> </div>
       </div>
 
@@ -29,8 +29,9 @@
     </div>
 
     <div id="sidebar"></div>
-
-    <router-view></router-view>
+    <div id="content">
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 
@@ -50,6 +51,11 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+
+  .wiki {
+    background: #111;
+  }
+
   #topbar {
     position: fixed;
     z-index: 9001;
@@ -129,6 +135,7 @@
     border: 1px solid #e5e5e5;
     float: left;
     font-size: 0.875rem;
+    background: white;
   }
 
   #tabs .main_tabs {
@@ -142,8 +149,8 @@
     right: 212px;
   }
 
-  #tabs .location {
-
+  #tabs .tab.active {
+    border-bottom: none;
   }
 
   #sidebar {
@@ -153,6 +160,13 @@
     width: 160px;
     min-height: calc(100vh - 104px);
     min-height: calc(100% - 104px);
-    background: #111111;
+  }
+
+  #content {
+    margin-top:106px;
+    margin-left: 160px;
+    width: calc(100% - 160px);
+    min-height: calc(100vh - 106px);
+    background: white;
   }
 </style>

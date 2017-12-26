@@ -16,7 +16,6 @@
 </script>
 
 <style scoped>
-
   .article {
     height: 2000px;
   }
