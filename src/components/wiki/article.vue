@@ -1,6 +1,6 @@
 <template>
   <div class="article">
-    article
+    {{this.article}}
   </div>
 </template>
 
@@ -16,4 +16,8 @@
 </script>
 
 <style scoped>
+
+  .article {
+    height: 2000px;
+  }
 </style>
