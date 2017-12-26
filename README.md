@@ -1,6 +1,6 @@
-# personal-web
+# Niwipedia
 
-> A Vue.js project
+> A wikipedia client with a redesigned interface
 
 ## Build Setup
 
