@@ -1,8 +1,21 @@
 <template>
   <div class="wiki">
+
     <div id="topbar"></div>
-    <div id="navbar"></div>
+
+    <div id="navbar">
+      <div class="logo">
+        <img src="../assets/logo.png">
+        <span class="brand"> WikipediA </span>
+        <span class="slogan"> The Free Encyclopedia </span>
+      </div>
+
+      <input id="searchBox">
+      </input>
+    </div>
+
     <div id="sidebar"></div>
+
     <router-view></router-view>
   </div>
 </template>
@@ -42,6 +55,44 @@
     height: 64px;
     border-bottom: 1px solid #e5e5e5;
     background: white;
+  }
+
+  #navbar .logo img {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    width: 72px;
+  }
+
+  #navbar .brand {
+    position: absolute;
+    top: 12px;
+    left: 96px;
+    color: #111;
+    font-size: 1.5rem;
+  }
+
+  #navbar .slogan {
+    position: absolute;
+    top: 40px;
+    left: 96px;
+    font-size: 0.6875rem;
+  }
+
+  #searchBox {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 192px;
+    height: 36px;
+    border-radius: 2px;
+    border: 1px solid #e5e5e5;
+    padding-left: 8px;
+    transition: width 0.2s;
+  }
+
+  #searchBox:focus {
+    width: 400px;
   }
 
   #sidebar {
