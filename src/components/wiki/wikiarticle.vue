@@ -4,8 +4,7 @@
     <hr class="title">
     <span class="source">From Wikipedia, the free encyclopedia</span>
 
-    <div class="article">
-      {{this.article.rawContent}}
+    <div class="article" v-html="this.article.rawContent">
     </div>
 
   </div>
@@ -23,12 +22,13 @@
       }
     },
     mounted () {
-      var wikiurl = 'https://en.wikipedia.org/w/api.php?action=query&titles='
-      var wikiend = '&prop=revisions&rvprop=content&format=json&formatversion=2'
-      this.$jsonp(wikiurl + 'Amtrak' + wikiend).then(json => {
-        this.article.rawContent = json.query.pages[0].revisions[0].content
+      var wikiurl = 'https://en.wikipedia.org/w/api.php?action=parse&format=json&page='
+      this.$jsonp(wikiurl + 'Apple').then(json => {
+        this.article.rawContent = json.parse.text['*']
 
-        this.article.rawContent.replace('Redirect', 'hola')
+        var rawContent = this.article.rawContent
+
+        console.log(rawContent)
       }).catch(err => {
         console.log(err)
       })
