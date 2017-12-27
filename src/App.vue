@@ -62,4 +62,14 @@
   .mw-editsection {
     display: none;
   }
+
+  input {
+    outline: none;
+  }
+
+  .quotebox {
+    border-radius: 2px;
+    border: 1px solid #e5e5e5 !important;
+    background: #f8f8f9;
+  }
 </style>

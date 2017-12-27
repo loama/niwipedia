@@ -117,6 +117,7 @@
 
   #searchBox:focus {
     width: 400px;
+    border: 1px solid #4a90e2;
   }
 
   #tabs {
