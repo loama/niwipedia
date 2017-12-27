@@ -11,6 +11,7 @@
 </template>
 
 <script>
+  import router from '../../router'
   export default {
     name: 'wikiarticle',
     data () {
@@ -22,19 +23,28 @@
         }
       }
     },
+    methods: {
+      loadArticle () {
+        this.article.parsedTitle = this.$route.params.wikiarticle.charAt(0).toUpperCase() + this.$route.params.wikiarticle.replace(/_/g, ' ').slice(1)
+
+        var wikiurl = 'https://en.wikipedia.org/w/api.php?action=parse&format=json&page='
+        this.$jsonp(wikiurl + this.$route.params.wikiarticle).then(json => {
+          this.article.rawContent = json.parse.text['*']
+        }).catch(err => {
+          console.log(err)
+        })
+      }
+    },
     mounted () {
-      this.article.parsedTitle = this.article.rawTitle.charAt(0).toUpperCase() + this.article.rawTitle.replace(/_/g, ' ').slice(1)
-
-      var wikiurl = 'https://en.wikipedia.org/w/api.php?action=parse&format=json&page='
-      this.$jsonp(wikiurl + this.article.rawTitle).then(json => {
-        this.article.rawContent = json.parse.text['*']
-
-        var rawContent = this.article.rawContent
-
-        console.log(rawContent)
-      }).catch(err => {
-        console.log(err)
-      })
+      var it = this
+      window.onclick = function (e) {
+        if (e.target.tagName === 'A') {
+          e.preventDefault()
+          router.push(e.target.attributes[0].value)
+          it.loadArticle()
+        }
+      }
+      this.loadArticle()
     }
   }
 </script>
@@ -65,6 +75,5 @@
     margin-top: 16px;
     font-size: 0.875rem;
   }
-
 
 </style>
