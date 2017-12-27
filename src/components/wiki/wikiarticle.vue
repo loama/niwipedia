@@ -26,7 +26,6 @@
     methods: {
       loadArticle () {
         this.article.parsedTitle = this.$route.params.wikiarticle.charAt(0).toUpperCase() + this.$route.params.wikiarticle.replace(/_/g, ' ').slice(1)
-
         var wikiurl = 'https://en.wikipedia.org/w/api.php?action=parse&format=json&page='
         this.$jsonp(wikiurl + this.$route.params.wikiarticle).then(json => {
           this.article.rawContent = json.parse.text['*']
@@ -45,6 +44,13 @@
         }
       }
       this.loadArticle()
+    },
+    watch: {
+      '$route' (to, from) {
+        router.push(to.path)
+        this.loadArticle()
+        console.log(this.$route.params.wikiarticle)
+      }
     }
   }
 </script>

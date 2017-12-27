@@ -48,10 +48,13 @@
     color: #191919;
   }
 
-  table.infobox {
-    border: 1px solid #e5e5e5;
+  table {
+    border: 1px solid #e5e5e5 !important;
     border-radius: 2px;
     background: #f8f8f9;
+  }
+
+  table.infobox {
     float: right;
     margin: 0 0 0 24px;
   }
