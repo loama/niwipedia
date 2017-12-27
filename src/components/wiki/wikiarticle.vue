@@ -41,7 +41,6 @@
 
 <style scoped>
   .wikiarticle {
-    height: 2000px;
     text-align: left;
     padding: 80px 24px;
   }
@@ -53,7 +52,7 @@
 
   hr.title {
     height: 0;
-    border: 1px solid #979797;
+    border-top: 1px solid #aaa;
     margin: 0;
   }
 
@@ -66,4 +65,6 @@
     margin-top: 16px;
     font-size: 0.875rem;
   }
+
+
 </style>

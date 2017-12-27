@@ -33,6 +33,8 @@
   body {
     padding: 0;
     margin: 0;
+    max-width: 100vw;
+    overflow-x: hidden;
   }
 
   a {
@@ -46,4 +48,15 @@
     color: #191919;
   }
 
+  table.infobox {
+    border: 1px solid #e5e5e5;
+    border-radius: 2px;
+    background: #f8f8f9;
+    float: right;
+    margin: 0 0 0 24px;
+  }
+
+  .mw-editsection {
+    display: none;
+  }
 </style>
