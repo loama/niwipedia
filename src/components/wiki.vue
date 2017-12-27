@@ -136,6 +136,11 @@
     float: left;
     font-size: 0.875rem;
     background: white;
+    background: #f0f0f0;
+  }
+
+  #tabs .tab:hover {
+    color: #4a90e2;
   }
 
   #tabs .main_tabs {
@@ -151,6 +156,11 @@
 
   #tabs .tab.active {
     border-bottom: none;
+    background: white;
+  }
+
+  #tabs .tab.active:hover {
+    color: #111;
   }
 
   #sidebar {
