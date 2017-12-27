@@ -1,6 +1,6 @@
 <template>
   <div class="wikiarticle">
-    <span class="title">{{this.article.title}}</span>
+    <span class="title">{{this.article.parsedTitle}}</span>
     <hr class="title">
     <span class="source">From Wikipedia, the free encyclopedia</span>
 
@@ -16,14 +16,17 @@
     data () {
       return {
         article: {
-          title: this.$route.params.wikiarticle,
+          rawTitle: this.$route.params.wikiarticle,
+          parsedTitle: '',
           rawContent: ''
         }
       }
     },
     mounted () {
+      this.article.parsedTitle = this.article.rawTitle.charAt(0).toUpperCase() + this.article.rawTitle.replace(/_/g, ' ').slice(1)
+
       var wikiurl = 'https://en.wikipedia.org/w/api.php?action=parse&format=json&page='
-      this.$jsonp(wikiurl + 'Apple').then(json => {
+      this.$jsonp(wikiurl + this.article.rawTitle).then(json => {
         this.article.rawContent = json.parse.text['*']
 
         var rawContent = this.article.rawContent

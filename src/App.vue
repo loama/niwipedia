@@ -27,11 +27,23 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
+    color: #4a4a4a;
   }
 
   body {
     padding: 0;
     margin: 0;
+  }
+
+  a {
+    color: #4a90e2;
+    text-decoration: none;
+  }
+
+  b {
+    font-family: 'AvenirNextRoundedPro-Med';
+    font-weight: 400;
+    color: #191919;
   }
 
 </style>
