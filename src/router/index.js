@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import langChoose from '@/components/langChoose'
 import wiki from '@/components/wiki'
 import main from '@/components/wiki/main'
-import article from '@/components/wiki/article'
+import wikiarticle from '@/components/wiki/wikiarticle'
 
 Vue.use(Router)
 
@@ -24,8 +24,8 @@ export default new Router({
           component: main
         },
         {
-          path: ':article',
-          component: article
+          path: ':wikiarticle',
+          component: wikiarticle
         }
       ]
     }

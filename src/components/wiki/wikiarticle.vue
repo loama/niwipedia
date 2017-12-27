@@ -1,5 +1,5 @@
 <template>
-  <div class="article">
+  <div class="wikiarticle">
     <span class="title">{{this.article}}</span>
     <hr class="title">
     <span class="source">From Wikipedia, the free encyclopedia</span>
@@ -8,17 +8,28 @@
 
 <script>
   export default {
-    name: 'article',
+    name: 'wikiarticle',
     data () {
       return {
         article: this.$route.params.article
       }
+    },
+    mounted () {
+      var wikiurl = 'https://en.wikipedia.org/w/api.php?action=query&titles='
+      var wikiend = '&prop=revisions&rvprop=content&format=json&formatversion=2'
+      this.$http.get(wikiurl + 'Amtrak' + wikiend).then(response => {
+        // get body data
+        console.log(response.body)
+      }, response => {
+        // error callback
+        console.log('error')
+      })
     }
   }
 </script>
 
 <style scoped>
-  .article {
+  .wikiarticle {
     height: 2000px;
     text-align: left;
     padding: 80px 24px;
