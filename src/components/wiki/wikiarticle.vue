@@ -1,8 +1,13 @@
 <template>
   <div class="wikiarticle">
-    <span class="title">{{this.article}}</span>
+    <span class="title">{{this.article.title}}</span>
     <hr class="title">
     <span class="source">From Wikipedia, the free encyclopedia</span>
+
+    <div class="article">
+      {{this.article.rawContent}}
+    </div>
+
   </div>
 </template>
 
@@ -11,18 +16,21 @@
     name: 'wikiarticle',
     data () {
       return {
-        article: this.$route.params.article
+        article: {
+          title: this.$route.params.wikiarticle,
+          rawContent: ''
+        }
       }
     },
     mounted () {
       var wikiurl = 'https://en.wikipedia.org/w/api.php?action=query&titles='
       var wikiend = '&prop=revisions&rvprop=content&format=json&formatversion=2'
-      this.$http.get(wikiurl + 'Amtrak' + wikiend).then(response => {
-        // get body data
-        console.log(response.body)
-      }, response => {
-        // error callback
-        console.log('error')
+      this.$jsonp(wikiurl + 'Amtrak' + wikiend).then(json => {
+        this.article.rawContent = json.query.pages[0].revisions[0].content
+
+        this.article.rawContent.replace('Redirect', 'hola')
+      }).catch(err => {
+        console.log(err)
       })
     }
   }
@@ -49,5 +57,10 @@
   span.source {
     font-size: 0.875rem;
     color: #4a4a4a;
+  }
+
+  div.article {
+    margin-top: 16px;
+    font-size: 0.875rem;
   }
 </style>
