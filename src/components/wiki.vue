@@ -10,8 +10,20 @@
         <span class="slogan"> The Free Encyclopedia </span>
       </div>
 
-      <input id="searchBox" :placeholder="this.search.placeholder">
-      </input>
+      <input id="searchBox" :placeholder="this.search.placeholder"
+        autocomplete="off"
+        v-model="query"
+        @focus="searching(true)"
+        @blue="searching(false)">
+
+      <ul class="search-results hide" v-bind:class="{ show: search.show }">
+        <span class="no-results"> No hay resultados </span>
+        <li v-for="result in search.results" v-on:click="goTo(result.title)">
+          <span class="title">{{result.title}}</span>
+          <span class="detail">{{result.description}}</span>
+          <img :src="result.src">
+        </li>
+      </ul>
 
     </div>
     <div id="tabs">
@@ -36,13 +48,65 @@
 </template>
 
 <script>
+  import VueTypeahead from 'vue-typeahead'
+  import router from '../router'
+
   export default {
+    extends: VueTypeahead,
     name: 'wiki',
     data () {
       return {
         location: 'Article',
         search: {
-          placeholder: 'Search wikipedia'
+          placeholder: 'Search wikipedia',
+          src: 'https://en.wikipedia.org/w/api.php?action=query&formatversion=2&generator=prefixsearch&gpslimit=5&prop=pageimages%7Cpageterms&piprop=thumbnail&pithumbsize=50&pilimit=10&redirects=&wbptterms=description&format=json&gpssearch=',
+          searching: false,
+          show: false,
+          results: {}
+        }
+      }
+    },
+    methods: {
+      goTo: function (where) {
+        router.push(where)
+        this.search.show = false
+        console.log(where)
+      },
+      searching: function (value) {
+        this.search.show = value
+        console.log(value + ' show search')
+      }
+    },
+    watch: {
+      query: function (val) {
+        if (val.length > 3 && !this.search.searching) {
+          // console.log(val)
+          this.search.searching = true
+          this.$jsonp(this.search.src + val).then(json => {
+            if (json.query !== undefined) {
+              var results = []
+              for (var i = 0; i < json.query.pages.length; i++) {
+                if (json.query.pages[i].thumbnail !== undefined) {
+                  if (json.query.pages[i].terms !== undefined) {
+                    results[i] = {title: json.query.pages[i].title, description: json.query.pages[i].terms.description[0], src: json.query.pages[i].thumbnail.source}
+                  } else {
+                    results[i] = {title: json.query.pages[i].title, description: '', src: json.query.pages[i].thumbnail.source}
+                  }
+                } else {
+                  results[i] = {title: json.query.pages[i].title, description: json.query.pages[i].terms.description[0], src: 'no source'}
+                }
+              }
+              this.search.results = results
+            } else {
+              console.log('no results')
+              this.search.results = {}
+            }
+            this.search.searching = false
+          }).catch(err => {
+            console.log(err)
+            this.search.results = {}
+            this.search.searching = false
+          })
         }
       }
     }
@@ -110,14 +174,37 @@
     height: 36px;
     border-radius: 2px;
     border: 1px solid #e5e5e5;
-    padding-left: 8px;
+    padding: 0 8px;
     transition: width 0.2s;
     font-size: 0.75rem;
+    text-overflow: ellipsis;
   }
 
   #searchBox:focus {
     width: 400px;
     border: 1px solid #4a90e2;
+  }
+
+  .search-results {
+    width: 410px;
+    position: fixed;
+    top: 80px;
+    right: 12px;
+    border: 1px solid #e5e5e5;
+    background: white;
+    padding: 0;
+  }
+
+  .search-results li {
+    border-bottom: 1px solid #e5e5e5;
+    padding: 8px;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .search-results li:hover {
+    background: #4a90e2;
+    color: white;
   }
 
   #tabs {
@@ -180,4 +267,5 @@
     min-height: calc(100vh - 106px);
     background: white;
   }
+
 </style>

@@ -4,7 +4,6 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import VueJsonp from 'vue-jsonp'
-
 Vue.use(VueJsonp, 5000)
 
 Vue.config.productionTip = false

@@ -72,4 +72,32 @@
     border: 1px solid #e5e5e5 !important;
     background: #f8f8f9;
   }
+
+  .hide {
+    display: none;
+  }
+
+  .show {
+    display: block;
+  }
+
+  th {
+    background-color: #388e3c !important;
+    color: white;
+    width: 100%;
+  }
+
+  table th a {
+    color: #b3e5fc !important;
+    font-weight: 200;
+  }
+
+  table tr td ul {
+    margin-left: -12px;
+  }
+
+  #Container {
+    border: 1px solid #e5e5e5 !important;
+    border-radius: 2px;
+  }
 </style>
