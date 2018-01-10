@@ -14,7 +14,7 @@
         autocomplete="off"
         v-model="query"
         @focus="searching(true)"
-        @blue="searching(false)">
+        @blur="searching(false)">
 
       <ul class="search-results hide" v-bind:class="{ show: search.show }">
         <span class="no-results"> No hay resultados </span>
@@ -61,7 +61,8 @@
           searching: false,
           show: false,
           results: {}
-        }
+        },
+        query: ''
       }
     },
     methods: {
@@ -71,8 +72,11 @@
         console.log(where)
       },
       searching: function (value) {
-        this.search.show = value
-        console.log(value + ' show search')
+        var it = this
+        setTimeout(function () {
+          it.search.show = value
+          console.log(value + ' show search')
+        }, 200)
       }
     },
     watch: {
@@ -83,16 +87,19 @@
           this.$jsonp(this.search.src + val).then(json => {
             if (json.query !== undefined) {
               var results = []
+              var description, src
               for (var i = 0; i < json.query.pages.length; i++) {
                 if (json.query.pages[i].thumbnail !== undefined) {
-                  if (json.query.pages[i].terms !== undefined) {
-                    results[i] = {title: json.query.pages[i].title, description: json.query.pages[i].terms.description[0], src: json.query.pages[i].thumbnail.source}
-                  } else {
-                    results[i] = {title: json.query.pages[i].title, description: '', src: json.query.pages[i].thumbnail.source}
-                  }
+                  src = json.query.pages[i].thumbnail.source
                 } else {
-                  results[i] = {title: json.query.pages[i].title, description: json.query.pages[i].terms.description[0], src: 'no source'}
+                  src = '' // REVIEW //
                 }
+                if (json.query.pages[i].terms !== undefined) {
+                  description = json.query.pages[i].terms.description[0]
+                } else {
+                  description = ''
+                }
+                results[i] = {title: json.query.pages[i].title, description: description, src: src}
               }
               this.search.results = results
             } else {
