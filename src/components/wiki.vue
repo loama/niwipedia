@@ -48,11 +48,9 @@
 </template>
 
 <script>
-  import VueTypeahead from 'vue-typeahead'
   import router from '../router'
 
   export default {
-    extends: VueTypeahead,
     name: 'wiki',
     data () {
       return {
