@@ -30,8 +30,15 @@
     </div>
     <div id="tabs">
       <div class="main_tabs">
-        <div class="tab location active"> <span>Article</span> </div>
-        <div class="tab talk"> <span>Talk</span> </div>
+        <div class="tab location"
+             v-on:click="tab('Article')"
+             v-bind:class="{active: tabs.active === 'Article' }"> <span>Article</span>
+        </div>
+
+        <div class="tab talk"
+             v-on:click="tab('Talk')"
+             v-bind:class="{active: tabs.active === 'Talk'}"> <span>Talk</span>
+        </div>
       </div>
 
       <div class="secondary_tabs">
@@ -66,7 +73,10 @@
           empty: true
         },
         query: '',
-        talk: false
+        talk: false,
+        tabs: {
+          active: 'Article'
+        }
       }
     },
     methods: {
@@ -79,15 +89,26 @@
         setTimeout(function () {
           it.search.show = value
         }, 100)
+      },
+      tab: function (tab) {
+        this.tabs.active = tab
+        var url = this.$route.path.split('/wiki/')[1]
+        if (tab === 'Article') {
+          url = url.replace('talk:', '')
+          router.push('/wiki/' + url)
+        } else if (tab === 'Talk') {
+          router.push('/wiki/talk:' + url)
+        }
+        console.log(tab)
       }
     },
     mounted () {
       // check if they are requesting the article or the talk tab
       var article = this.$route.path.replace('/wiki/', '').split('talk:')
       if (article[1] !== undefined) {
-        this.talk = true
+        this.tabs.active = 'Talk'
       } else {
-        this.talk = false
+        this.tabs.active = 'Article'
       }
       // redirect to main page if no article is provided in route
       if (article[0].replace('/wiki', '').length > 0) {
