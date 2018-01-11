@@ -17,11 +17,13 @@
         @blur="searching(false)">
 
       <ul class="search-results hide" v-bind:class="{ show: search.show }">
-        <span class="no-results"> No hay resultados </span>
+        <div class="no-results hide" v-bind:class="{show: search.noResults}"> No hay resultados para tu búsqueda </div>
+        <div class="start-typing" v-bind:class="{hide: !search.empty}"> Empieza a escribir para hacer una búsqueda </div>
         <li v-for="result in search.results" v-on:click="goTo(result.title)">
-          <span class="title">{{result.title}}</span>
-          <span class="detail">{{result.description}}</span>
-          <img :src="result.src">
+          <div class="img" v-bind:style="{backgroundImage: 'url(' + result.src + ')'}">
+          </div>
+          <div class="title">{{result.title}}</div>
+          <div class="detail">{{result.description}}</div>
         </li>
       </ul>
 
@@ -58,8 +60,10 @@
           placeholder: 'Search wikipedia',
           src: 'https://en.wikipedia.org/w/api.php?action=query&formatversion=2&generator=prefixsearch&gpslimit=5&prop=pageimages%7Cpageterms&piprop=thumbnail&pithumbsize=50&pilimit=10&redirects=&wbptterms=description&format=json&gpssearch=',
           searching: false,
-          show: false,
-          results: {}
+          show: true,
+          results: {},
+          noResults: false,
+          empty: true
         },
         query: ''
       }
@@ -72,7 +76,7 @@
       searching: function (value) {
         var it = this
         setTimeout(function () {
-          it.search.show = value
+          it.search.show = true
         }, 100)
       }
     },
@@ -81,6 +85,7 @@
         if (val.length > 2 && !this.search.searching) {
           // console.log(val)
           this.search.searching = true
+          this.search.empty = false
           this.$jsonp(this.search.src + val).then(json => {
             if (json.query !== undefined) {
               var results = []
@@ -89,7 +94,7 @@
                 if (json.query.pages[i].thumbnail !== undefined) {
                   src = json.query.pages[i].thumbnail.source
                 } else {
-                  src = '' // REVIEW //
+                  src = '/static/article_preview.png' // REVIEW //
                 }
                 if (json.query.pages[i].terms !== undefined) {
                   description = json.query.pages[i].terms.description[0]
@@ -99,18 +104,23 @@
                 results[i] = {title: json.query.pages[i].title, description: description, src: src}
               }
               this.search.results = results
+              this.search.noResults = false
             } else {
-              console.log('no results')
               this.search.results = {}
+              this.search.noResults = true
             }
             this.search.searching = false
           }).catch(err => {
             console.log(err)
             this.search.results = {}
             this.search.searching = false
+            this.search.noResults = true
           })
         } else {
           this.search.results = {}
+          if (val.length < 3) {
+            this.search.empty = true
+          }
         }
       }
     }
@@ -205,14 +215,52 @@
 
   .search-results li {
     border-bottom: 1px solid #e5e5e5;
-    padding: 8px;
     cursor: pointer;
     list-style: none;
+    height: 56px;
+    text-align: left;
+    overflow: hidden;
   }
 
   .search-results li:hover {
     background: #4a90e2;
     color: white;
+  }
+
+  .search-results li .title {
+    font-family: 'AvenirNextRoundedPro-Med';
+    color: #191919;
+    padding: 8px 8px 0 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .search-results li:hover .title {
+    color: white;
+  }
+
+  .search-results li div.detail {
+    padding-left: 8px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 336px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .search-results li div.img {
+    float: left;
+    margin: 0;
+    width: 56px;
+    height: 56px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
+  .search-results .no-results, .search-results .start-typing {
+    margin: 8px;
   }
 
   #tabs {
