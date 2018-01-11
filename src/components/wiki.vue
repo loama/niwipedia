@@ -73,7 +73,7 @@
         var it = this
         setTimeout(function () {
           it.search.show = value
-        }, 200)
+        }, 100)
       }
     },
     watch: {
@@ -161,7 +161,7 @@
 
   #navbar .brand {
     position: absolute;
-    top: 0;
+    top: 2px;
     left: 76px;
     color: #111;
     font-size: 1.5rem;

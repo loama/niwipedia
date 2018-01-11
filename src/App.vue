@@ -64,10 +64,12 @@
 
   .tleft {
     float: left;
+    clear: left;
   }
 
   .tright {
     float: right;
+    clear: right;
   }
 
   table.infobox {
@@ -118,4 +120,9 @@
     border: 1px solid #e5e5e5 !important;
     border-radius: 2px;
   }
+
+  .transparent {
+    opacity: 0;
+  }
+
 </style>

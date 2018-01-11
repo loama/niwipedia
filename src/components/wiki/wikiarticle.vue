@@ -1,6 +1,7 @@
 <template>
   <div class="wikiarticle">
     <span class="title">{{this.article.parsedTitle}}</span>
+    <span class="sticky-title" v-bind:class="{ transparent: article.stickyTitleTransparent }">{{this.article.parsedTitle}}</span>
     <hr class="title">
     <span class="source">From Wikipedia, the free encyclopedia</span>
 
@@ -19,7 +20,8 @@
         article: {
           rawTitle: this.$route.params.wikiarticle,
           parsedTitle: '',
-          rawContent: ''
+          rawContent: '',
+          stickyTitleTransparent: true
         }
       }
     },
@@ -32,6 +34,13 @@
         }).catch(err => {
           console.log(err)
         })
+      },
+      handleScroll: function (e) {
+        if (e.pageY > 180) {
+          this.article.stickyTitleTransparent = false
+        } else {
+          this.article.stickyTitleTransparent = true
+        }
       }
     },
     mounted () {
@@ -44,6 +53,7 @@
         }
       }
       this.loadArticle()
+      window.addEventListener('scroll', this.handleScroll)
     },
     watch: {
       '$route' (to, from) {
@@ -64,6 +74,16 @@
   span.title {
     font-family: 'AvenirNextRoundedPro-Med';
     font-size: 1.5rem;
+  }
+
+  span.sticky-title {
+    font-family: 'AvenirNextRoundedPro-Med';
+    font-size: 1.5rem;
+    position: fixed;
+    top: 42px;
+    z-index: 9003;
+    left: 50%;
+    transition: all 0.3s;
   }
 
   hr.title {
