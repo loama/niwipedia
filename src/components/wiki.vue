@@ -60,7 +60,7 @@
           placeholder: 'Search wikipedia',
           src: 'https://en.wikipedia.org/w/api.php?action=query&formatversion=2&generator=prefixsearch&gpslimit=5&prop=pageimages%7Cpageterms&piprop=thumbnail&pithumbsize=50&pilimit=10&redirects=&wbptterms=description&format=json&gpssearch=',
           searching: false,
-          show: true,
+          show: false,
           results: {},
           noResults: false,
           empty: true
@@ -76,7 +76,7 @@
       searching: function (value) {
         var it = this
         setTimeout(function () {
-          it.search.show = true
+          it.search.show = value
         }, 100)
       }
     },
