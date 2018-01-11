@@ -52,10 +52,22 @@
     border: 1px solid #e5e5e5 !important;
     border-radius: 2px;
     background: #f8f8f9;
+    border-spacing: 0;
+    border-collapse: collapse;
   }
 
   table.mw-stack {
     border: none !important;
+  }
+
+  table tr:last-child td:first-child {
+    border-bottom-left-radius: 2px;
+    border-top-left-radius: 2px;
+  }
+
+  table tr:last-child td:last-child {
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
   }
 
   .thumb {
@@ -106,6 +118,7 @@
 
   tr th, tr td {
     padding: 4px;
+    border: 1px solid #e5e5e5;
   }
 
   table th a {
@@ -123,6 +136,19 @@
 
   .transparent {
     opacity: 0;
+  }
+
+  #toc {
+    background: #f8f8f9;
+    border-radius: 2px;
+    border: 1px solid #e5e5e5;
+    padding: 8px 8px 8px;
+    width: 320px;
+    max-width: calc(100% - 336px);
+  }
+
+  #toc h2 {
+    margin: 0;
   }
 
 </style>
