@@ -65,7 +65,8 @@
           noResults: false,
           empty: true
         },
-        query: ''
+        query: '',
+        talk: false
       }
     },
     methods: {
@@ -78,6 +79,21 @@
         setTimeout(function () {
           it.search.show = value
         }, 100)
+      }
+    },
+    mounted () {
+      // check if they are requesting the article or the talk tab
+      var article = this.$route.path.replace('/wiki/', '').split('talk:')
+      if (article[1] !== undefined) {
+        this.talk = true
+      } else {
+        this.talk = false
+      }
+      // redirect to main page if no article is provided in route
+      if (article[0].replace('/wiki', '').length > 0) {
+        // article exists
+      } else {
+        router.push('/wiki/Main_Page')
       }
     },
     watch: {
@@ -291,6 +307,7 @@
     position: absolute;
     left: 0;
     display: inline;
+    z-index: 1005;
   }
 
   #tabs .secondary_tabs {
@@ -320,7 +337,7 @@
     margin-top: 84px;
     margin-left: 160px;
     width: calc(100% - 160px);
-    min-height: calc(100vh - 106px);
+    min-height: calc(100vh - 84px);
     background: white;
   }
 

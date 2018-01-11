@@ -8,6 +8,13 @@
     <div class="article" v-html="this.article.rawContent">
     </div>
 
+    <div class="hover-article"
+      v-bind:style="{left: hoverArticle.left, top: hoverArticle.top}"
+      v-bind:class="{fadeInFromNone: hoverArticle.show, fadeOutToNone: !hoverArticle.show}">
+      <div class="img" v-bind:style="{backgroundImage: 'url(' + '/static/article_preview.png' + ')' }">
+      </div>
+    </div>
+
   </div>
 </template>
 
@@ -22,6 +29,14 @@
           parsedTitle: '',
           rawContent: '',
           stickyTitleTransparent: true
+        },
+        hoverArticle: {
+          left: 0,
+          top: 0,
+          show: false,
+          title: '',
+          description: '',
+          src: ''
         }
       }
     },
@@ -33,6 +48,7 @@
           this.article.rawContent = json.parse.text['*']
         }).catch(err => {
           console.log(err)
+          this.article.parsedTitle = 'we couldn´t find that article :('
         })
       },
       handleScroll: function (e) {
@@ -54,6 +70,19 @@
       }
       this.loadArticle()
       window.addEventListener('scroll', this.handleScroll)
+      setTimeout(function () {
+        document.addEventListener('mouseover', function (e) {
+          if (e.target.nodeName === 'A') {
+            console.log('hover')
+            console.log(e)
+            it.hoverArticle.left = (e.layerX - 40) + 'px'
+            it.hoverArticle.top = (e.layerY + 24) + 'px'
+            it.hoverArticle.show = true
+          } else {
+            it.hoverArticle.show = false
+          }
+        })
+      }, 1000)
     },
     watch: {
       '$route' (to, from) {
@@ -100,6 +129,36 @@
   div.article {
     margin-top: 16px;
     font-size: 0.875rem;
+  }
+
+  div.hover-article {
+    width: 400px;
+    height: 200px;
+    border: 1px solid #e5e5e5;
+    border-radius: 2px;
+    background: white;
+    position: absolute;
+    z-index: 1000;
+  }
+
+  div.hover-article:after {
+      content: '';
+      display: block;
+      position: absolute;
+      top: -8px;
+      left: 40px;
+      width: 16px;
+      height: 16px;
+      background: #FFFFFF;
+      border-right:1px solid #e5e5e5;
+      border-bottom:1px solid #e5e5e5;
+      -moz-transform:rotate(-135deg);
+      -webkit-transform:rotate(-135deg);
+  }
+
+  div.hover-article div.img {
+    width: 40px;
+    height: 40px;
   }
 
 </style>
