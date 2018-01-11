@@ -54,6 +54,22 @@
     background: #f8f8f9;
   }
 
+  table.mw-stack {
+    border: none !important;
+  }
+
+  .thumb {
+    margin: 12px;
+  }
+
+  .tleft {
+    float: left;
+  }
+
+  .tright {
+    float: right;
+  }
+
   table.infobox {
     float: right;
     margin: 0 0 0 24px;
@@ -82,13 +98,15 @@
   }
 
   th {
-    background-color: #388e3c !important;
-    color: white;
-    width: 100%;
+    background-color: transparent !important;
+    color: #191919;
+  }
+
+  tr th, tr td {
+    padding: 4px;
   }
 
   table th a {
-    color: #b3e5fc !important;
     font-weight: 200;
   }
 

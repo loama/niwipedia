@@ -4,7 +4,7 @@
     <div id="topbar"></div>
 
     <div id="navbar">
-      <div class="logo">
+      <div class="logo" v-on:click="goTo('Main_Page')">
         <img src="../assets/logo.png">
         <span class="brand"> WikipediA </span>
         <span class="slogan"> The Free Encyclopedia </span>
@@ -28,7 +28,7 @@
     </div>
     <div id="tabs">
       <div class="main_tabs">
-        <div class="tab location active"> <span>{{this.location}}</span> </div>
+        <div class="tab location active"> <span>Article</span> </div>
         <div class="tab talk"> <span>Talk</span> </div>
       </div>
 
@@ -54,7 +54,6 @@
     name: 'wiki',
     data () {
       return {
-        location: 'Article',
         search: {
           placeholder: 'Search wikipedia',
           src: 'https://en.wikipedia.org/w/api.php?action=query&formatversion=2&generator=prefixsearch&gpslimit=5&prop=pageimages%7Cpageterms&piprop=thumbnail&pithumbsize=50&pilimit=10&redirects=&wbptterms=description&format=json&gpssearch=',
@@ -69,19 +68,17 @@
       goTo: function (where) {
         router.push(where)
         this.search.show = false
-        console.log(where)
       },
       searching: function (value) {
         var it = this
         setTimeout(function () {
           it.search.show = value
-          console.log(value + ' show search')
         }, 200)
       }
     },
     watch: {
       query: function (val) {
-        if (val.length > 3 && !this.search.searching) {
+        if (val.length > 2 && !this.search.searching) {
           // console.log(val)
           this.search.searching = true
           this.$jsonp(this.search.src + val).then(json => {
@@ -112,6 +109,8 @@
             this.search.results = {}
             this.search.searching = false
           })
+        } else {
+          this.search.results = {}
         }
       }
     }
@@ -130,7 +129,7 @@
     z-index: 9001;
     top: 0;
     left: 0;
-    height: 40px;
+    height: 31px;
     width: 100vw;
     width: 100%;
     border-bottom: solid 1px #e5e5e5;
@@ -140,40 +139,44 @@
   #navbar {
     position: fixed;
     z-index: 9000;
-    top: 40px;
+    top: 32px;
     left: 0;
     width: 100vw;
     width: 100%;
-    height: 64px;
+    height: 51px;
     border-bottom: 1px solid #e5e5e5;
     background: white;
   }
 
+  .logo {
+    cursor: pointer;
+  }
+
   #navbar .logo img {
     position: absolute;
-    top: 8px;
-    left: 8px;
-    width: 72px;
+    top: 6px;
+    left: 6px;
+    height: 40px;
   }
 
   #navbar .brand {
     position: absolute;
-    top: 12px;
-    left: 96px;
+    top: 0;
+    left: 76px;
     color: #111;
     font-size: 1.5rem;
   }
 
   #navbar .slogan {
     position: absolute;
-    top: 40px;
-    left: 96px;
+    top: 32px;
+    left: 76px;
     font-size: 0.6875rem;
   }
 
   #searchBox {
     position: absolute;
-    top: 12px;
+    top: 6px;
     right: 12px;
     width: 189px;
     height: 36px;
@@ -191,9 +194,9 @@
   }
 
   .search-results {
-    width: 410px;
+    width: 416px;
     position: fixed;
-    top: 80px;
+    top: 64px;
     right: 12px;
     border: 1px solid #e5e5e5;
     background: white;
@@ -214,7 +217,7 @@
 
   #tabs {
     position: absolute;
-    top: 104px;
+    top: 84px;
     left: 160px;
     width: calc(100% - 160px);
     background: red;
@@ -266,7 +269,7 @@
   }
 
   #content {
-    margin-top:106px;
+    margin-top: 84px;
     margin-left: 160px;
     width: calc(100% - 160px);
     min-height: calc(100vh - 106px);
