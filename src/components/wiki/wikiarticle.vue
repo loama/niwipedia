@@ -11,8 +11,14 @@
     <div class="hover-article"
       v-bind:style="{left: hoverArticle.left, top: hoverArticle.top}"
       v-bind:class="{fadeInFromNone: hoverArticle.show, fadeOutToNone: !hoverArticle.show}">
-      <div class="img" v-bind:style="{backgroundImage: 'url(' + '/static/article_preview.png' + ')' }">
+      <div class="loading-screen" v-bind:class="{hide: !hoverArticle.loading}">
+        <div class="loader"></div>
       </div>
+      <div class="img" v-bind:style="{backgroundImage: 'url(' + hoverArticle.src + ')' }">
+      </div>
+
+      <div class="title">{{hoverArticle.title}}</div>
+      <div class="description">{{hoverArticle.description}}</div>
     </div>
 
   </div>
@@ -36,7 +42,8 @@
           show: false,
           title: '',
           description: '',
-          src: ''
+          src: '/static/article_preview.png',
+          loading: true
         }
       }
     },
@@ -46,6 +53,31 @@
         var wikiurl = 'https://en.wikipedia.org/w/api.php?action=parse&format=json&page='
         this.$jsonp(wikiurl + this.$route.params.wikiarticle).then(json => {
           this.article.rawContent = json.parse.text['*']
+        }).catch(err => {
+          console.log(err)
+          this.article.parsedTitle = 'we couldn´t find that article :('
+        })
+      },
+      loadHoverArticle (title, link) {
+        this.hoverArticle.loading = true
+        this.hoverArticle.title = title
+        var wikiurl = 'https://en.wikipedia.org/w/api.php?action=query&format=json&prop=extracts|pageimages&exintro&explaintext&titles='
+        this.$jsonp(wikiurl + link).then(json => {
+          console.log(wikiurl + link)
+          this.hoverArticle.title = json.query.pages[Object.keys(json.query.pages)[0]].title
+          this.hoverArticle.description = json.query.pages[Object.keys(json.query.pages)[0]].extract
+          if (json.query.pages[Object.keys(json.query.pages)[0]].thumbnail !== undefined) {
+            this.hoverArticle.src = json.query.pages[Object.keys(json.query.pages)[0]].thumbnail.source
+          } else {
+            this.hoverArticle.src = '/static/article_preview.png'
+          }
+          this.hoverArticle.loading = false
+          // remove title from anchors to not get the anoying tag
+          var anchors = document.getElementsByTagName('a')
+          var i
+          for (i = 0; i < anchors.length; i++) {
+            anchors[i].removeAttribute('title')
+          }
         }).catch(err => {
           console.log(err)
           this.article.parsedTitle = 'we couldn´t find that article :('
@@ -73,12 +105,16 @@
       setTimeout(function () {
         document.addEventListener('mouseover', function (e) {
           if (e.target.nodeName === 'A') {
-            console.log('hover')
-            console.log(e)
+            var title = e.target.title
+            var link = e.target.pathname.split('/wiki/')[1]
+            it.loadHoverArticle(title, link)
             it.hoverArticle.left = (e.layerX - 40) + 'px'
             it.hoverArticle.top = (e.layerY + 24) + 'px'
             it.hoverArticle.show = true
           } else {
+            it.hoverArticle.title = ''
+            it.hoverArticle.description = ''
+            it.hoverArticle.src = '/static/article_preview.png'
             it.hoverArticle.show = false
           }
         })
@@ -157,8 +193,42 @@
   }
 
   div.hover-article div.img {
-    width: 40px;
-    height: 40px;
+    width: 80px;
+    height: 200px;
+    float: right;
+    background-size: contain;
+    background-position: top left;
+    margin: 48px 8px 8px 8px;
+    position: relative;
+    z-index: 2000;
+    background-repeat: no-repeat;
+  }
+
+  div.hover-article div.title {
+    font-family: 'AvenirNextRoundedPro-Med';
+    color: #191919;
+    padding: 8px;
+    border-bottom: 1px solid #e5e5e5;
+    text-overflow: ellipsis;
+    width: 100%;
+    white-space: nowrap;
+  }
+
+  div.hover-article div.description {
+    padding: 8px;
+    max-height: 140px;
+    overflow: hidden;
+  }
+
+  div.hover-article div.loading-screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 3003;
+    width: 400px;
+    height: 200px;
+    background: white;
+    border-radius: 2px;
   }
 
 </style>
