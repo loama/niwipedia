@@ -147,7 +147,11 @@
     position: fixed;
     top: 42px;
     z-index: 9003;
-    left: 50%;
+    width: calc(100% - 500px);
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    text-align: center;
+    left: 250px;
     transition: all 0.3s;
   }
 

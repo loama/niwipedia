@@ -16,6 +16,8 @@
         @focus="searching(true)"
         @blur="searching(false)">
 
+      <img class="magnifying-glass" src="../assets/search.svg">
+
       <ul class="search-results hide" v-bind:class="{ show: search.show }">
         <div class="no-results hide" v-bind:class="{show: search.noResults}"> No hay resultados para tu búsqueda </div>
         <div class="start-typing" v-bind:class="{hide: !search.empty}"> Empieza a escribir para hacer una búsqueda </div>
@@ -197,6 +199,8 @@
 
   .logo {
     cursor: pointer;
+    position: relative;
+    z-index: 9004;
   }
 
   #navbar .logo img {
@@ -238,6 +242,13 @@
   #searchBox:focus {
     width: 400px;
     border: 1px solid #4a90e2;
+  }
+
+  .magnifying-glass {
+    position: fixed;
+    top: 48px;
+    right: 20px;
+    pointer-events: none;
   }
 
   .search-results {
