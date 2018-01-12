@@ -173,7 +173,8 @@
 
   div.hover-article {
     width: 400px;
-    height: 200px;
+    height: auto;
+    max-height: 208px;
     border: 1px solid #e5e5e5;
     border-radius: 2px;
     background: white;
@@ -197,8 +198,10 @@
   }
 
   div.hover-article div.img {
-    width: 80px;
-    height: 200px;
+    min-width: 56px;
+    max-width: 80px;
+    min-height: 56px;
+    height: auto;
     float: right;
     background-size: contain;
     background-position: top left;
@@ -219,7 +222,7 @@
   }
 
   div.hover-article div.description {
-    padding: 8px;
+    padding: 8px 8px 10px 8px;
     max-height: 140px;
     overflow: hidden;
   }
