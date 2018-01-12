@@ -96,8 +96,12 @@
       window.onclick = function (e) {
         if (e.target.tagName === 'A') {
           e.preventDefault()
-          router.push(e.target.attributes[0].value)
-          it.loadArticle()
+          if (e.target.className.includes('external')) {
+            window.open(e.target.href,'_blank')
+          } else {
+            router.push(e.target.attributes[0].value)
+            it.loadArticle()
+          }
         }
       }
       this.loadArticle()

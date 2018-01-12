@@ -277,22 +277,24 @@
     }
   }
 
-  #mp-left {
-    border: 1px solid #4CAF50 !important;
+  #mp-upper {
+    margin-top: 16px !important;
+    border: 1px white !important;
+  }
+
+  #mp-left, #mp-right {
+    border: 1px solid #e5e5e5 !important;
     border-radius: 2px !important;
   }
 
   #mp-tfa-h2, #mp-dyk-h2 {
-    background: #4CAF50 !important;
-    border-radius: 2px 2px 0 0 !important;
+    background: transparent !important;
     border: none !important;
-    color: white !important;
+    color: #33691E !important;
+    text-transform: uppercase;
     margin: 0 0 8px 0 !important;
-  }
-
-  #mp-right {
-    border: 1px solid #2196F3 !important;
-    border-radius: 2px !important;
+    text-align: left;
+    font-weight: 500 !important;
   }
 
   #mp-upper td, #mp-upper table {
@@ -303,16 +305,28 @@
   #mp-topbanner {
     border: 1px solid #e5e5e5 !important;
     border-radius: 2px !important;
-    background: #f8f8f9 !important;
+    background: white !important;
+  }
+
+  #mp-topbanner ul {
+    list-style: none;
+  }
+
+  #mp-topbanner li::before {
+    content: "• ";
+    color: #4a90e2 !important;
   }
 
   #mp-itn-h2, #mp-otd-h2 {
-    background: #2196F3 !important;
+    background: transparent !important;
     border: none !important;
     border-radius: 2px 2px 0 0 !important;
     margin: 0 !important;
-    color: white !important;
+    color: #01579B !important;
+    text-transform: uppercase;
     margin-bottom: 0 0 8px 0 !important;
+    text-align: center;
+    font-weight: 500 !important;
   }
 
 </style>
