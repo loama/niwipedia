@@ -63,7 +63,7 @@
         this.hoverArticle.title = title
         var wikiurl = 'https://en.wikipedia.org/w/api.php?action=query&format=json&prop=extracts|pageimages&exintro&explaintext&titles='
         this.$jsonp(wikiurl + link).then(json => {
-          console.log(wikiurl + link)
+          // console.log(wikiurl + link)
           this.hoverArticle.title = json.query.pages[Object.keys(json.query.pages)[0]].title
           this.hoverArticle.description = json.query.pages[Object.keys(json.query.pages)[0]].extract
           if (json.query.pages[Object.keys(json.query.pages)[0]].thumbnail !== undefined) {
@@ -97,9 +97,10 @@
         if (e.target.tagName === 'A') {
           e.preventDefault()
           if (e.target.className.includes('external')) {
-            window.open(e.target.href,'_blank')
+            window.open(e.target.href, '_blank')
           } else {
             router.push(e.target.attributes[0].value)
+            window.scrollTo(0, 0)
             it.loadArticle()
           }
         }
@@ -128,7 +129,7 @@
       '$route' (to, from) {
         router.push(to.path)
         this.loadArticle()
-        console.log(this.$route.params.wikiarticle)
+        // console.log(this.$route.params.wikiarticle)
       }
     }
   }
