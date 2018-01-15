@@ -23,7 +23,10 @@
       <ul class="search-results hide" v-bind:class="{ show: search.show }">
         <div class="no-results hide" v-bind:class="{show: search.noResults}"> No hay resultados para tu búsqueda </div>
         <div class="start-typing" v-bind:class="{hide: !search.empty}"> Empieza a escribir para hacer una búsqueda </div>
-        <li v-for="result in search.results" v-on:click="goTo(result.title)">
+        <li v-for="result in search.results"
+            v-on:click="goTo(result.title)"
+            v-bind:class="{active: result.index === search.active}"
+            v-on:mouseover="searchActive(result.index)">
           <div class="img" v-bind:style="{backgroundImage: 'url(' + result.src + ')'}">
           </div>
           <div class="title">{{result.title}}</div>
@@ -68,18 +71,27 @@
     data () {
       return {
         search: {
-          placeholder: 'Search wikipedia',
+          placeholder: 'press S to search',
           src: 'https://en.wikipedia.org/w/api.php?action=query&formatversion=2&generator=prefixsearch&gpslimit=5&prop=pageimages%7Cpageterms&piprop=thumbnail&pithumbsize=50&pilimit=10&redirects=&wbptterms=description&format=json&gpssearch=',
           searching: false,
           show: false,
           results: {},
           noResults: false,
-          empty: true
+          empty: true,
+          active: 0
         },
         query: '',
         talk: false,
         tabs: {
           active: 'Article'
+        },
+        lang: {
+          en: {
+            placeholder: {
+              on: 'search ...',
+              off: 'press S to search'
+            }
+          }
         }
       }
     },
@@ -93,6 +105,12 @@
         var it = this
         setTimeout(function () {
           it.search.show = value
+          if (!value) {
+            it.search.placeholder = it.lang.en.placeholder.off
+            it.search.active = 0
+          } else {
+            it.search.placeholder = it.lang.en.placeholder.on
+          }
         }, 100)
       },
       tab: function (tab) {
@@ -105,9 +123,13 @@
           router.push('/wiki/talk:' + url)
         }
         console.log(tab)
+      },
+      searchActive: function (index) {
+        this.search.active = index
       }
     },
     mounted () {
+      var it = this
       // check if they are requesting the article or the talk tab
       var article = this.$route.path.replace('/wiki/', '').split('talk:')
       if (article[1] !== undefined) {
@@ -121,6 +143,37 @@
       } else {
         router.push('/wiki/Main_Page')
       }
+      document.addEventListener('keypress', function (key) {
+        if (it.search.show && it.search.results.length !== undefined) { // handle up and down arrows only if search is active
+          var resultsLenght = it.search.results.length
+          if (key.keyCode === 38) { // arrow up
+            key.preventDefault()
+            if (it.search.active > 0) {
+              it.search.active = it.search.active - 1
+            } else {
+              it.search.active = resultsLenght - 1
+            }
+          }
+          if (key.keyCode === 40) { // arrow down
+            key.preventDefault()
+            if (it.search.active < resultsLenght - 1) {
+              it.search.active = it.search.active + 1
+            } else {
+              it.search.active = 0
+            }
+          }
+        }
+        if (key.key === 's') { // s
+          document.getElementById('searchBox').focus()
+        }
+        if (key.key === 'Enter') { // enter
+          it.goTo(it.search.results[it.search.active].title)
+          document.getElementById('searchBox').blur()
+        }
+        if (key.key === 'Escape') {
+          document.getElementById('searchBox').blur()
+        }
+      })
     },
     watch: {
       query: function (val) {
@@ -143,7 +196,7 @@
                 } else {
                   description = ''
                 }
-                results[i] = {title: json.query.pages[i].title, description: description, src: src}
+                results[i] = {index: i, title: json.query.pages[i].title, description: description, src: src}
               }
               this.search.results = results
               this.search.noResults = false
@@ -275,6 +328,7 @@
     top: 48px;
     right: 20px;
     pointer-events: none;
+    z-index: 9003;
   }
 
   .search-results {
@@ -296,7 +350,7 @@
     overflow: hidden;
   }
 
-  .search-results li:hover {
+  .search-results li.active {
     background: #4a90e2;
     color: white;
   }
@@ -310,7 +364,7 @@
     text-overflow: ellipsis;
   }
 
-  .search-results li:hover .title {
+  .search-results li.active .title {
     color: white;
   }
 
