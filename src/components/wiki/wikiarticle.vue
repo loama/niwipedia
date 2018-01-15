@@ -1,7 +1,6 @@
 <template>
   <div class="wikiarticle">
     <span class="title">{{this.article.parsedTitle}}</span>
-    <span class="sticky-title" v-bind:class="{ transparent: article.stickyTitleTransparent }">{{this.article.parsedTitle}}</span>
     <hr class="title">
     <span class="source">From Wikipedia, the free encyclopedia</span>
 
@@ -26,6 +25,7 @@
 
 <script>
   import router from '../../router'
+  import store from '../../store'
   export default {
     name: 'wikiarticle',
     data () {
@@ -33,8 +33,7 @@
         article: {
           rawTitle: this.$route.params.wikiarticle,
           parsedTitle: '',
-          rawContent: '',
-          stickyTitleTransparent: true
+          rawContent: ''
         },
         hoverArticle: {
           left: 0,
@@ -50,6 +49,7 @@
     methods: {
       loadArticle () {
         this.article.parsedTitle = this.$route.params.wikiarticle.charAt(0).toUpperCase() + this.$route.params.wikiarticle.replace(/_/g, ' ').slice(1)
+        store.commit('articleTitle', this.article.parsedTitle)
         var wikiurl = 'https://en.wikipedia.org/w/api.php?action=parse&format=json&page='
         this.$jsonp(wikiurl + this.$route.params.wikiarticle).then(json => {
           this.article.rawContent = json.parse.text['*']
@@ -85,9 +85,9 @@
       },
       handleScroll: function (e) {
         if (e.pageY > 180) {
-          this.article.stickyTitleTransparent = false
+          store.commit('articleTransparency', false)
         } else {
-          this.article.stickyTitleTransparent = true
+          store.commit('articleTransparency', true)
         }
       }
     },
@@ -124,6 +124,19 @@
           }
         })
       }, 1000)
+      // main page functions
+      if (this.$route.path.split('/')[2] === 'Main_Page') {
+        setTimeout(function () {
+          // change source of image for another bigger
+          var thumb = document.getElementById('mp-tfa-img').getElementsByTagName('img')[0]
+          var src = thumb.getAttribute('src').replace('100px', '220px')
+          thumb.setAttribute('src', src)
+          // add thumbcaption-background div
+          var thumbcaptionBackground = document.createElement('div')
+          thumbcaptionBackground.className = 'thumbcaption-background'
+          document.getElementById('mp-tfa-img').appendChild(thumbcaptionBackground)
+        }, 2000)
+      }
     },
     watch: {
       '$route' (to, from) {
@@ -144,20 +157,6 @@
   span.title {
     font-family: 'AvenirNextRoundedPro-Med';
     font-size: 1.5rem;
-  }
-
-  span.sticky-title {
-    font-family: 'AvenirNextRoundedPro-Med';
-    font-size: 1.5rem;
-    position: fixed;
-    top: 42px;
-    z-index: 9003;
-    width: calc(100% - 500px);
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    text-align: center;
-    left: 250px;
-    transition: all 0.3s;
   }
 
   hr.title {

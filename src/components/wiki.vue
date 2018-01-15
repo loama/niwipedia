@@ -10,6 +10,8 @@
         <span class="slogan"> The Free Encyclopedia </span>
       </div>
 
+      <span class="sticky-title" v-bind:class="{ transparent: article.stickyTitleTransparent }">{{article.title}}</span>
+
       <input id="searchBox" :placeholder="this.search.placeholder"
         autocomplete="off"
         v-model="query"
@@ -85,6 +87,7 @@
       goTo: function (where) {
         router.push(where)
         this.search.show = false
+        window.scrollTo(0, 0)
       },
       searching: function (value) {
         var it = this
@@ -162,6 +165,11 @@
           }
         }
       }
+    },
+    computed: {
+      article () {
+        return this.$store.state.article
+      }
     }
   }
 </script>
@@ -225,6 +233,23 @@
     font-size: 0.6875rem;
   }
 
+  span.sticky-title {
+    font-family: 'AvenirNextRoundedPro-Med';
+    font-size: 1.5rem;
+    position: absolute;
+    top: 8px;
+    left: 0;
+    z-index: 9001;
+    width: calc(100% - 500px);
+    max-width: calc(100% - 500px);
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    text-align: center;
+    left: 250px;
+    transition: all 0.3s;
+  }
+
   #searchBox {
     position: absolute;
     top: 6px;
@@ -237,6 +262,7 @@
     transition: width 0.2s;
     font-size: 0.75rem;
     text-overflow: ellipsis;
+    z-index: 9002;
   }
 
   #searchBox:focus {
