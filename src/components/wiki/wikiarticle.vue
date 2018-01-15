@@ -1,8 +1,8 @@
 <template>
   <div class="wikiarticle">
-    <span class="title">{{this.article.parsedTitle}}</span>
-    <hr class="title">
-    <span class="source">From Wikipedia, the free encyclopedia</span>
+    <span class="title" id="articleTitle">{{this.article.parsedTitle}}</span>
+    <hr class="title" id="articleLine">
+    <span class="source" id="articleSource">From Wikipedia, the free encyclopedia</span>
 
     <div class="article" v-html="this.article.rawContent">
     </div>
@@ -57,6 +57,15 @@
           console.log(err)
           this.article.parsedTitle = 'we couldn´t find that article :('
         })
+        if (this.article.parsedTitle === 'Main Page') {
+          document.getElementById('articleTitle').style.display = 'none'
+          document.getElementById('articleLine').style.display = 'none'
+          document.getElementById('articleSource').style.display = 'none'
+        } else {
+          document.getElementById('articleTitle').style.display = 'block'
+          document.getElementById('articleLine').style.display = 'block'
+          document.getElementById('articleSource').style.display = 'block'
+        }
       },
       loadHoverArticle (title, link) {
         this.hoverArticle.loading = true
