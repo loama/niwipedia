@@ -87,9 +87,19 @@
         },
         lang: {
           en: {
-            placeholder: {
-              on: 'search ...',
-              off: 'press S to search'
+            search: {
+              placeholder: {
+                on: 'search ...',
+                off: 'press S to search'
+              }
+            }
+          },
+          es: {
+            search: {
+              placeholder: {
+                on: 'buscar ...',
+                off: 'presiona S para buscar'
+              }
             }
           }
         }
@@ -106,10 +116,10 @@
         setTimeout(function () {
           it.search.show = value
           if (!value) {
-            it.search.placeholder = it.lang.en.placeholder.off
+            it.search.placeholder = it.lang.en.search.placeholder.off
             it.search.active = 0
           } else {
-            it.search.placeholder = it.lang.en.placeholder.on
+            it.search.placeholder = it.lang.en.search.placeholder.on
           }
         }, 100)
       },
@@ -177,7 +187,7 @@
     },
     watch: {
       query: function (val) {
-        if (val.length > 2 && !this.search.searching) {
+        if (val.length > 2) {
           // console.log(val)
           this.search.searching = true
           this.search.empty = false
